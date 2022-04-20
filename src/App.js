@@ -1,48 +1,48 @@
 import React, { useState } from 'react'
 import { Nav, Navbar } from 'react-bootstrap'
-import { Link, Route, Routes } from 'react-router-dom'
-import ChannelPage from './ChannelPage'
+import { NavLink, Route, Routes } from 'react-router-dom'
+import AddChannelPage from './AddChannelPage'
+import ChannelViewPage from './ChannelViewPage'
 import { CHANNELS } from './data'
 import HomePage from './HomePage'
-import Sidebar from './Sidebar'
 import NotFoundPage from './NotFoundPage'
+import SettingsPage from './SettingsPage'
+import Sidebar from './Sidebar'
 
 export default function App() {
-  
-  const [channels, setChannels] = useState(CHANNELS);
+  const [channelList, setChannelList] = useState(CHANNELS);
 
-  const handleAddChannel = (newChannel) => {
-    setChannels( curChannels => curChannels.concat([ newChannel ]) );
+  const addChannel = (newChannel) => {
+    setChannelList(currChannelList => [...currChannelList, newChannel] )
   }
 
   return (
-    <div>
-      <Navbar bg="dark" variant="dark" expand="md">
+    <>
+      <Navbar bg="dark" variant="dark">
         <div className="container">
-          <Navbar.Brand href="#home">Slack</Navbar.Brand>
-          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-          <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link as={Link} to="/">Home</Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
+          <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+          <Nav className="me-auto">
+            <Nav.Link as={NavLink} to="/">Home</Nav.Link>
+            <Nav.Link as={NavLink} to="/settings">Settings</Nav.Link>
+          </Nav>
         </div>
       </Navbar>
       <div className="container">
         <div className="row">
-          <div className="col-4 bg-light">
-            <Sidebar channels={channels} />
+          <div className="col-4 bg-dark text-white">
+            <Sidebar channelList={channelList} />
           </div>
           <div className="col">
             <Routes>
-              <Route path="/" element={<HomePage onAddChannel={handleAddChannel} channels={channels} />} />
-              <Route path="channels/:channelId" element={<ChannelPage channels={channels} />} />
+              <Route path="/settings" element={<SettingsPage />}/>
+              <Route path="/" element={<HomePage />}/>
+              <Route path="/channels/:channelId" element={<ChannelViewPage channelList={channelList} />} />
+              <Route path="/channels/new" element={<AddChannelPage onSubmit={addChannel} />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
-

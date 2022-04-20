@@ -1,13 +1,18 @@
 import React from 'react'
-import { Nav } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
-export default function Sidebar({ channels }) {
+export default function Sidebar({ channelList }) {
+    const navigate = useNavigate();
     return (
         <div>
-            <Nav className="flex-column">
-                { channels.map(c => <Nav.Link as={Link} key={c.id} to={ "/channels/" + c.id } > #{ c.name } </Nav.Link> ) }
-            </Nav>
+            <button className="btn btn-primary" onClick={() => navigate("/channels/new")}>+</button>
+            <ul className="list-unstyled">
+                {channelList.map(channel => (
+                    <li key={channel.id}>
+                        <NavLink to={"/channels/" + channel.id}> #{channel.name} </NavLink>
+                    </li>
+                ))}
+            </ul>
         </div>
     )
 }
